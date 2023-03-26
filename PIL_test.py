@@ -15,7 +15,6 @@ while(True):
 
     # Assemble rectangle
     height, width = cap.shape[:2]
-    print(width, height)
 
     top_left = (int(width * 0.5 - height * 0.3), int(height * 0.2))
     bottom_right = (int(width * 0.5 + height * 0.3), int(height * 0.8))
@@ -35,7 +34,19 @@ cv2.destroyAllWindows()
 
 # Convert numpy array to PIL image
 im = Image.fromarray(np.uint8(framed))
-width, height = im.size
+square_dim = height * 0.6
+
+sliced = [[], [], [], [], [], [], [], [], []]
+
+for y in range(9):
+    y_top = height * 0.2 + y * (square_dim//9)
+    y_bottom = y_top + square_dim // 9
+    for x in range(9):
+        x_left = width * 0.5 - height * 0.3 + x * square_dim // 9
+        x_right = x_left + square_dim // 9
+        sliced[y].append(Image.fromarray(np.uint8(framed[int(y_top):int(y_bottom), int(x_left):int(x_right)])))
+        sliced[y][x].save(str(y) + " " + str(x) + ".jpg")
+
 
 # Display photo
-im.show()
+# im.show()
